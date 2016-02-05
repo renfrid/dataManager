@@ -22,8 +22,7 @@ class Xform extends CI_Controller {
     
     public function __construct(){
         parent::__construct();
-        $this->load->model(array('xform_model','users_model'));
-        $this->load->library('form_auth');
+        $this->load->model(array('xform_model','authentication_model'));
         log_message('debug', 'Xform controller initialized');
 
     }
@@ -55,51 +54,8 @@ class Xform extends CI_Controller {
         // Get the digest from the http header
         $digest = $_SERVER['PHP_AUTH_DIGEST'];
 
-        //server realm and unique id
-        $realm = 'Authorized users of Sacids Openrosa';
-        $nonce = md5(uniqid());
-
-        // If there was no digest, show login
-        if (empty($digest)):
-
-            //populate login form if no digest authenticate
-            $this->form_auth->require_login_prompt($realm,$nonce);
-            exit;
-        endif;
-
-        //http_digest_parse
-        $digest_parts = $this->form_auth->http_digest_parse($digest);
-
-        //username from http digest obtained
-        $valid_user = $digest_parts['username'];
-
-        //get user details from database
-        $user=$this->users_model->get_user_details($valid_user);
-        $valid_pass = $user->digest_password; //digest password
-        $user_id = $user->id; //user_id
-        $db_user = $user->username; //username
-
-        //show status header if user not available in database
-        if(empty($db_user)):
-            //populate login form if no digest authenticate
-            $this->form_auth->require_login_prompt($realm,$nonce);
-            exit;
-        endif;
-
-
-        // Based on all the info we gathered we can figure out what the response should be
-        $A1 = $valid_pass; //digest password
-        $A2 = md5("{$_SERVER['REQUEST_METHOD']}:{$digest_parts['uri']}");
-        $valid_response = md5("{$A1}:{$digest_parts['nonce']}:{$digest_parts['nc']}:{$digest_parts['cnonce']}:{$digest_parts['qop']}:{$A2}");
-
-        // If digest fails, show login
-        if ($digest_parts['response']!=$valid_response):
-            //populate login form if no digest authenticate
-            $this->form_auth->require_login_prompt($realm,$nonce);
-            exit;
-        endif;
-
-
+        //pass user authentication from mobile client
+        $user_id = $this->authentication_model->digest_authentication($digest);
 
         //IF passes authentication
         if( $_SERVER['REQUEST_METHOD']==="HEAD"):
@@ -119,7 +75,11 @@ class Xform extends CI_Controller {
                     $path=FCPATH."assets/forms/data/xml/".$file_name;
 
                     //insert form details in database
-                    $data=array('file_name' => $file_name, 'user_id' => $user_id);
+                    $data=array(
+                        'file_name' => $file_name, 
+                        'user_id' => $user_id
+                        );
+                    //insert data into submission
                     $this->db->insert('submission_form',$data);
 
                 elseif($file_extension == 'jpg' OR $file_extension == 'jpeg' OR $file_extension == 'png'):
