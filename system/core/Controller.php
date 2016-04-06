@@ -49,6 +49,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/user_guide/general/controllers.html
  */
+
+/**
+ * @property Submission_model $Submission_model
+ * @property Xform_model $Xform_model
+ * @property User_model $User_model
+ * @property Feedback_model $Feedback_model
+ * @property Disease_model $Disease_model
+ */
+
 class CI_Controller {
 
 	/**
