@@ -6,33 +6,34 @@
  * Date: 2/29/2016
  * Time: 4:17 PM
  */
-class Disease extends CI_Controller
+class Ohkr extends CI_Controller
 {
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Disease_model");
+		$this->load->model("Ohkr_model");
 	}
 
 
 	public function index()
 	{
-		$this->diseases();
+		$this->disease_list();
 	}
 
-	public function diseases()
+	public function disease_list()
 	{
-		$data['title'] = "Diseases";
-		$data['diseases'] = $this->Disease_model->find_all(30, 0);
+		$data['title'] = "Diseases List";
+		$data['diseases'] = $this->Ohkr_model->find_all(30, 0);
 
+		//render data
 		$this->load->view('header', $data);
-		$this->load->view("disease/menu");
-		$this->load->view("disease/index", $data);
+		$this->load->view("ohkr/menu");
+		$this->load->view("ohkr/disease_list");
 		$this->load->view('footer');
 	}
 
-	public function add_new()
+	public function add_new_disease()
 	{
 		$data['title'] = "Add new";
 
@@ -41,8 +42,8 @@ class Disease extends CI_Controller
 		if ($this->form_validation->run() === FALSE) {
 
 			$this->load->view('header', $data);
-			$this->load->view("disease/menu");
-			$this->load->view("disease/add_new", $data);
+			$this->load->view("ohkr/menu");
+			$this->load->view("ohkr/add_new_disease", $data);
 			$this->load->view('footer');
 		} else {
 			$disease = array(
@@ -51,12 +52,12 @@ class Disease extends CI_Controller
 				"date_created" => date("c")
 			);
 
-			if ($this->Disease_model->add($disease)) {
+			if ($this->Ohkr_model->add($disease)) {
 				$this->session->set_flashdata("message", $this->lang->line("add_disease_successful"));
 			} else {
 				$this->session->set_flashdata("message", $this->lang->line("error_failed_to_add_disease"));
 			}
-			redirect("disease/add_new");
+			redirect("ohkr/add_new_disease");
 		}
 	}
 
@@ -65,14 +66,14 @@ class Disease extends CI_Controller
 
 	}
 
-	public function species()
+	public function species_list()
 	{
-		$data['title'] = "Species";
-		$data['species'] = $this->Disease_model->find_all_species(30, 0);
+		$data['title'] = "Species List";
+		$data['species'] = $this->Ohkr_model->find_all_species(30, 0);
 
 		$this->load->view('header', $data);
-		$this->load->view("disease/menu");
-		$this->load->view("disease/species", $data);
+		$this->load->view("ohkr/menu");
+		$this->load->view("ohkr/species_list", $data);
 		$this->load->view('footer');
 	}
 
@@ -85,8 +86,8 @@ class Disease extends CI_Controller
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->load->view('header', $data);
-			$this->load->view("disease/menu");
-			$this->load->view("disease/add_new_specie", $data);
+			$this->load->view("ohkr/menu");
+			$this->load->view("ohkr/add_new_specie", $data);
 			$this->load->view('footer');
 		} else {
 			$specie = array(
@@ -94,12 +95,12 @@ class Disease extends CI_Controller
 				"date_created" => date("c")
 			);
 
-			if ($this->Disease_model->add_specie($specie)) {
+			if ($this->Ohkr_model->add_specie($specie)) {
 				$this->session->set_flashdata("message", $this->lang->line("add_specie_successful"));
 			} else {
 				$this->session->set_flashdata("message", $this->lang->line("error_failed_to_add_specie"));
 			}
-			redirect("disease/add_new_specie");
+			redirect("ohkr/add_new_specie");
 		}
 	}
 
@@ -109,12 +110,11 @@ class Disease extends CI_Controller
 		$data['title'] = "Add new symptoms";
 
 		$this->form_validation->set_rules("name", $this->lang->line("label_symptom_name"), "required");
-		//$this->form_validation->set_rules("description", $this->lang->line("label_description"), "required");
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->load->view('header', $data);
-			$this->load->view("disease/menu");
-			$this->load->view("disease/add_new_symptom", $data);
+			$this->load->view("ohkr/menu");
+			$this->load->view("ohkr/add_new_symptom", $data);
 			$this->load->view('footer');
 		} else {
 			$symptoms = array(
@@ -123,23 +123,23 @@ class Disease extends CI_Controller
 				"date_created" => date("c")
 			);
 
-			if ($this->Disease_model->add_symptom($symptoms)) {
+			if ($this->Ohkr_model->add_symptom($symptoms)) {
 				$this->session->set_flashdata("message", $this->lang->line("add_symptom_successful"));
 			} else {
 				$this->session->set_flashdata("message", $this->lang->line("error_failed_to_add_symptom"));
 			}
-			redirect("disease/add_new_symptom");
+			redirect("ohkr/add_new_symptom");
 		}
 	}
 
-	public function symptoms()
+	public function symptoms_list()
 	{
-		$data['title'] = "Symptoms";
-		$data['symptoms'] = $this->Disease_model->find_all_symptoms(30, 0);
+		$data['title'] = "Symptoms List";
+		$data['symptoms'] = $this->Ohkr_model->find_all_symptoms(30, 0);
 
 		$this->load->view('header', $data);
-		$this->load->view("disease/menu");
-		$this->load->view("disease/symptoms", $data);
+		$this->load->view("ohkr/menu");
+		$this->load->view("ohkr/symptoms_list");
 		$this->load->view('footer');
 	}
 }

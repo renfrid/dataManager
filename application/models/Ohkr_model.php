@@ -6,7 +6,7 @@
  * Date: 2/29/2016
  * Time: 4:19 PM
  */
-class Disease_model extends CI_Model
+class Ohkr_model extends CI_Model
 {
 	//default table if not defined in conf/sacids.php
 	private static $table_name = "diseases";

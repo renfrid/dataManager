@@ -1,5 +1,5 @@
 <div class="grid_11" style="padding-top: 20px; text-align: left;">
-	<?php echo form_open_multipart('disease/add_new_symptom', 'class="pure-form pure-form-aligned"'); ?>
+	<?php echo form_open_multipart('ohkr/add_new_symptom', 'class="pure-form pure-form-aligned"'); ?>
 	<div class="formCon">
 		<div class="formConInner">
 			<h3>Symptom Details</h3>
