@@ -20,7 +20,6 @@ class Dashboard extends CI_Controller {
 	public function index(){
 		//echo $_SERVER['PHP_AUTH_DIGEST'];
 
-		
 		$this->data['title']="Sacids Research Portal";
 		$this->load->view('header',$this->data);
 		$this->load->view('index');
